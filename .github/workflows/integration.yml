@@ -12,6 +12,14 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9','3.10','3.11','3.12']
+        django-version: ['4.2','5.0']
+        exclude:
+          - python-version: '3.9'
+            django-version: '5.0'
+      fail-fast: false
 
     steps:
     - name: Checkout code
