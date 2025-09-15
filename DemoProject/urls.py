@@ -19,5 +19,5 @@ from django.urls import path
 from Apk1.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/',indexPage),
+    # path('index/',indexPage),
 ]
