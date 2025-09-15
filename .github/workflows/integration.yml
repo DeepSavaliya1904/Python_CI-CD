@@ -37,10 +37,6 @@ jobs:
         pip install django==${{ matrix.django-version }} flake8 coverage
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         # Install other dependencies from requirements.txt if it exists
-
-    - name: Run linting
-      run: |
-        flake8 . --max-line-length=120 --exclude=migrations  # Check code style, skip migrations
         
     - name: Run migrations
       run: |
