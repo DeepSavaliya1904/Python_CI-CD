@@ -8,3 +8,5 @@ class User(models.Model):
     mobile_no = models.CharField(max_length=10, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
+
+class test
