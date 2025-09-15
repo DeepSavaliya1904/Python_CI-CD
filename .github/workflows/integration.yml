@@ -1,7 +1,5 @@
-# GitHub Actions workflow for Django CI with SQLite
-name: Django CI with SQLite
+name: Django CI with MySQL
 
-# Trigger the workflow on push or pull request to the main branch
 on:
   push:
     branches:
@@ -10,86 +8,78 @@ on:
     branches:
       - main
 
-# Define the jobs to be executed
 jobs:
   test:
-    # Name of the job
     name: Run Tests
-    # Run on the latest Ubuntu environment
     runs-on: ubuntu-latest
-    # Define a matrix to test multiple Python and Django versions
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12']
         django-version: ['4.2', '5.0']
-        # Exclude incompatible combination of Python 3.9 with Django 5.0
         exclude:
           - python-version: '3.9'
             django-version: '5.0'
-      # Continue testing other matrix combinations even if one fails
       fail-fast: false
 
-    # Define the steps for the test job
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
-    # Step 1: Checkout the repository code
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Step 2: Set up the specified Python version
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        # Cache pip dependencies to speed up subsequent runs
         cache: 'pip'
 
-    # Step 3: Install Python dependencies
     - name: Install dependencies
       run: |
-        # Upgrade pip to the latest version
         python -m pip install --upgrade pip
-        # Install Django, flake8, and coverage for the specified versions
-        pip install django==${{ matrix.django-version }} flake8 coverage
-        # Install additional dependencies from requirements.txt if it exists
+        pip install django==${{ matrix.django-version }} flake8 coverage mysqlclient
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    # Step 4: Run Django migrations
+    - name: Set up environment variables
+      run: |
+        echo "DATABASE_URL=mysql://root:testpassword@localhost:3306/test_db" >> $GITHUB_ENV
+        echo "DJANGO_SETTINGS_MODULE=DemoProject.settings" >> $GITHUB_ENV
+
     - name: Run migrations
       env:
-        # Specify the Django settings module for the project
         DJANGO_SETTINGS_MODULE: DemoProject.settings
       run: |
-        # Check for pending migrations without applying them
         python manage.py makemigrations --check --dry-run
-        # Apply migrations to set up the database
         python manage.py migrate
-      # Allow migration step to fail without stopping the workflow
       continue-on-error: true
 
-    # Step 5: Run tests and generate coverage report
     - name: Run tests with coverage
       run: |
-        # Run Django tests with coverage
         coverage run manage.py test
-        # Generate coverage report and fail if coverage is below 80%
         coverage report --fail-under=80
 
-    # Step 6: Build a Docker image for the Django application
     - name: Build Docker image
       run: |
-        # Build Docker image with tags for Python and Django versions
         docker build -t my-django-app:${{ matrix.python-version }}-${{ matrix.django-version }} \
         --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
         --build-arg DJANGO_VERSION=${{ matrix.django-version }} .
 
-    # Step 7: Run a Docker container to test the application
     - name: Run Docker container for testing
       run: |
-        # Run the Docker container in detached mode, mapping port 8000
-        docker run -d -p 8000:8000 --name django-test my-django-app:${{ matrix.python-version }}-${{ matrix.django-version }}
-        # Wait 5 seconds for the server to start
+        docker run -d -p 8000:8000 --name django-test \
+        -e DATABASE_URL=mysql://root:testpassword@mysql:3306/test_db \
+        my-django-app:${{ matrix.python-version }}-${{ matrix.django-version }}
         sleep 5
-        # Test if the application is running by sending a request to localhost:8000
         curl --fail http://localhost:8000 || exit 1
-      # Fail the workflow if this step fails
       continue-on-error: false
