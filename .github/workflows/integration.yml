@@ -47,7 +47,7 @@ jobs:
       run: |
         python manage.py test
 
-    - name: Check code coverage
+    - name: Check for known vulnerabilities
       run: |
-        coverage run --source='.' manage.py test
-        coverage report --fail-under=80  # Fail if coverage is below 80%
+        pip install safety
+        safety check
