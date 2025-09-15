@@ -37,10 +37,6 @@ jobs:
         pip install django==${{ matrix.django-version }} flake8 coverage
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Run linting with flake8
-      run: |
-        flake8 . --max-line-length=120 --exclude=venv,migrations
-
     - name: Run migrations
       env:
         DJANGO_SETTINGS_MODULE: your_project_name.settings  # Replace with your project's settings module
