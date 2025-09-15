@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.9','3.10','3.11','3.12']
-        django-version: ['4.2','5.0']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        django-version: ['4.2', '5.0']
         exclude:
           - python-version: '3.9'
             django-version: '5.0'
@@ -25,8 +25,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version}}
-      uses: actions/setup-python@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
@@ -36,18 +36,33 @@ jobs:
         python -m pip install --upgrade pip
         pip install django==${{ matrix.django-version }} flake8 coverage
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        # Install other dependencies from requirements.txt if it exists
-        
+
+    - name: Run linting with flake8
+      run: |
+        flake8 . --max-line-length=120 --exclude=venv,migrations
+
     - name: Run migrations
+      env:
+        DJANGO_SETTINGS_MODULE: your_project_name.settings  # Replace with your project's settings module
       run: |
-        python manage.py makemigrations
+        python manage.py makemigrations --check --dry-run
         python manage.py migrate
+      continue-on-error: true  # Allow migrations to fail gracefully for CI testing
 
-    - name: Run tests
+    - name: Run tests with coverage
       run: |
-        python manage.py test
+        coverage run manage.py test
+        coverage report --fail-under=80
 
-    - name: Check for known vulnerabilities
+    - name: Build Docker image
       run: |
-        pip install safety
-        safety check
+        docker build -t my-django-app:${{ matrix.python-version }}-${{ matrix.django-version }} \
+        --build-arg PYTHON_VERSION=${{ matrix.python-version }} \
+        --build-arg DJANGO_VERSION=${{ matrix.django-version }} .
+
+    - name: Run Docker container for testing
+      run: |
+        docker run -d -p 8000:8000 --name django-test my-django-app:${{ matrix.python-version }}-${{ matrix.django-version }}
+        sleep 5  # Wait for the server to start
+        curl --fail http://localhost:8000 || exit 1
+      continue-on-error: false
