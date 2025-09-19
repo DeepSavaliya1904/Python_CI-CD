@@ -2,80 +2,151 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>E-commerce Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylo - Find Your Perfect Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
-            background: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-        .login-container {
-            width: 350px;
-            margin: 80px auto;
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-        .login-container label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-        }
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 18px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .login-container button:hover {
-            background: #0056b3;
-        }
-        .login-container .signup-link {
-            text-align: center;
-            margin-top: 18px;
-        }
-        .login-container .signup-link a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .login-container .signup-link a:hover {
-            text-decoration: underline;
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body>
-    <div class="login-container">
-        <h2>Login to Your Account</h2>
-        <form method="POST" action="/login">
-            <label for="username">Email or Username</label>
-            <input type="text" id="username" name="username" required>
+<body class="bg-gray-100">
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-gray-800">Stylo</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="text-gray-600 hover:text-indigo-600">Home</a>
+                <a href="#" class="text-gray-600 hover:text-indigo-600">Shop</a>
+                <a href="#" class="text-gray-600 hover:text-indigo-600">New Arrivals</a>
+                <a href="#" class="text-gray-600 hover:text-indigo-600">About</a>
+                <a href="#" class="text-gray-600 hover:text-indigo-600">Contact</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-indigo-600"><i data-lucide="search"></i></button>
+                <a href="#" class="text-gray-600 hover:text-indigo-600"><i data-lucide="heart"></i></a>
+                <a href="#" class="relative text-gray-600 hover:text-indigo-600">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                </a>
+                <a href="/login" class="hidden md:block text-gray-600 hover:text-indigo-600"><i data-lucide="user"></i></a>
+                 <button class="md:hidden text-gray-600 hover:text-indigo-600"><i data-lucide="menu"></i></button>
+            </div>
+        </nav>
+    </header>
 
-            <button type="submit">Login</button>
-        </form>
-        <div class="signup-link">
-            Don't have an account? <a href="/register">Sign up</a>
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-white">
+            <div class="container mx-auto px-6 py-20 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+                    Upgrade Your Wardrobe
+                </h1>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                    Discover the latest trends and timeless classics. Quality apparel for every occasion, designed to make you look and feel your best.
+                </p>
+                <a href="#" class="mt-8 inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                    Shop Collection
+                </a>
+            </div>
+        </section>
+
+        <!-- Featured Products Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Featured Products</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product Card 1 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                        <img src="https://placehold.co/400x500/E2E8F0/4A5568?text=Product+Image" alt="Modern Urban Jacket" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800">Modern Urban Jacket</h3>
+                            <p class="text-gray-600 mt-2">$120.00</p>
+                            <button class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">Add to Cart</button>
+                        </div>
+                    </div>
+                     <!-- Product Card 2 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                        <img src="https://placehold.co/400x500/E2E8F0/4A5568?text=Product+Image" alt="Classic White Tee" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800">Classic White Tee</h3>
+                            <p class="text-gray-600 mt-2">$35.00</p>
+                            <button class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">Add to Cart</button>
+                        </div>
+                    </div>
+                     <!-- Product Card 3 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                        <img src="https://placehold.co/400x500/E2E8F0/4A5568?text=Product+Image" alt="Slim Fit Denim Jeans" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800">Slim Fit Denim Jeans</h3>
+                            <p class="text-gray-600 mt-2">$89.99</p>
+                            <button class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">Add to Cart</button>
+                        </div>
+                    </div>
+                     <!-- Product Card 4 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                        <img src="https://placehold.co/400x500/E2E8F0/4A5568?text=Product+Image" alt="Leather Ankle Boots" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800">Leather Ankle Boots</h3>
+                            <p class="text-gray-600 mt-2">$150.00</p>
+                            <button class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Stylo</h3>
+                    <p class="text-gray-400">Dressing the future with style and substance. High-quality apparel for the modern individual.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Shop</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Men's Collection</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Women's Collection</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Sale</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 class="text-lg font-semibold mb-4">Help</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Customer Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Track Order</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Returns & Exchanges</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-lucide="youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
+                <p>&copy; 2024 Stylo. All Rights Reserved.</p>
+            </div>
         </div>
-    </div>
+    </footer>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
+
